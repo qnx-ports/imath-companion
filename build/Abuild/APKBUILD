@@ -1,0 +1,50 @@
+# Contributor: Alex Yam <alex@alexyam.com>
+# QNX Maintainer: Felix Xing <fxing@qnx.com>
+
+pkgname=imath
+pkgver=3.2.2
+pkgrel=0
+pkgdesc="C++ and python library of 2D and 3D vector, matrix, and math operations for computer graphics"
+url="https://github.com/AcademySoftwareFoundation/Imath"
+arch="all"
+license="BSD-3-Clause"
+depends="libc++"
+makedepends="
+    bash
+    cmake
+    ninja
+    clang
+    libc++-dev
+    "
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/AcademySoftwareFoundation/Imath/archive/refs/tags/v$pkgver.tar.gz"
+builddir=$srcdir/Imath-$pkgver
+
+# openexr used to vendor an imath that was system installed
+replaces="openexr"
+
+build() {
+    CFLAGS="$CFLAGS -O2" \
+    CXXFLAGS="$CXXFLAGS -O2" \
+    cmake -B build -G Ninja \
+        -DCMAKE_C_COMPILER=clang \
+        -DCMAKE_CXX_COMPILER=clang++ \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=lib \
+        -DBUILD_SHARED_LIBS=True \
+        -DCMAKE_BUILD_TYPE=None \
+        -DPYTHON=OFF
+    cmake --build build
+}
+
+check() {
+    cd build && ctest
+}
+
+package() {
+    DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+492a624e4c0b59685d1ea58a3c2c63ddb4ba5ab9177c7d2a1b7e80be95d38ce02c74fafd2fe0982f7d21e5e75c938cc24a33a12d827dec32727cb8dcd5066450  imath-3.2.2.tar.gz
+"
