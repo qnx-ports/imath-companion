@@ -3,7 +3,7 @@
 
 pkgname=imath
 pkgver=3.2.2
-pkgrel=${pkgrel:-0}
+pkgrel=0
 pkgdesc="C++ and python library of 2D and 3D vector, matrix, and math operations for computer graphics"
 url="https://github.com/AcademySoftwareFoundation/Imath"
 arch="all"
@@ -45,7 +45,6 @@ package() {
     DESTDIR="$pkgdir" cmake --install build
 }
 
-options="$options ${DISABLE_CHECK:+!check}"
 sha512sums="
 492a624e4c0b59685d1ea58a3c2c63ddb4ba5ab9177c7d2a1b7e80be95d38ce02c74fafd2fe0982f7d21e5e75c938cc24a33a12d827dec32727cb8dcd5066450  imath-3.2.2.tar.gz
 "
